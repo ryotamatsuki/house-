@@ -23,6 +23,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Validate JavaScript syntax
+        run: node --check --input-type=module < app.js
+      - name: Verify static entry files
+        run: test -s index.html && test -s styles.css && test -s app.js
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
