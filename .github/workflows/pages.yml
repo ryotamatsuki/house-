@@ -22,15 +22,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Validate JavaScript syntax
         run: node --check --input-type=module < app.js
       - name: Verify static entry files
         run: test -s index.html && test -s styles.css && test -s app.js
+      - name: Install browser smoke-test runtime
+        run: |
+          npm install --no-save playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Run WebGL browser smoke test
+        run: |
+          python3 -m http.server 4173 >/tmp/house-http.log 2>&1 &
+          node .github/smoke.mjs
+      - name: Upload smoke screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-smoke
+          path: smoke.png
+          if-no-files-found: ignore
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: .
       - name: Deploy to GitHub Pages
