@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,6 +23,37 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Apply one-time sliding-door fix
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('app.js')
+          text = p.read_text()
+          old = """      if (axis === 'x') {
+                  panelA.position.x = this.t * each * 0.92;
+                  panelB.position.x = -this.t * each * 0.92;
+                } else {
+                  panelA.position.z = this.t * each * 0.92;
+                  panelB.position.z = -this.t * each * 0.92;
+                }"""
+          new = """      if (axis === 'x') {
+                  // Slide one leaf behind the other so half of the opening becomes fully passable.
+                  panelA.position.x = this.t * each;
+                  panelB.position.x = 0;
+                } else {
+                  panelA.position.z = this.t * each;
+                  panelB.position.z = 0;
+                }"""
+          if old in text:
+              p.write_text(text.replace(old, new))
+          PY
+          if ! git diff --quiet -- app.js; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add app.js
+            git commit -m "Fix sliding door clearance"
+            git push
+          fi
       - name: Validate JavaScript syntax
         run: node --check --input-type=module < app.js
       - name: Verify static entry files
