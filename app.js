@@ -291,11 +291,12 @@ function createSlidingDoors({ x, z, width = 2.4, height = 2.05, axis = 'x', labe
     update(dt) {
       this.t = THREE.MathUtils.damp(this.t, this.target, 8, dt);
       if (axis === 'x') {
-        panelA.position.x = this.t * each * 0.92;
-        panelB.position.x = -this.t * each * 0.92;
+        // Slide one leaf behind the other so half of the opening becomes fully passable.
+        panelA.position.x = this.t * each;
+        panelB.position.x = 0;
       } else {
-        panelA.position.z = this.t * each * 0.92;
-        panelB.position.z = -this.t * each * 0.92;
+        panelA.position.z = this.t * each;
+        panelB.position.z = 0;
       }
       refreshCollider(colliderA);
       refreshCollider(colliderB);
