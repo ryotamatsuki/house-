@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#d9cfb4" />
+  <meta name="description" content="田園に建つオリジナル木造住宅の中と周辺を歩ける3Dブラウザ散策アプリ" />
+  <title>郷野の家 — Rural House Walk</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app" aria-label="3D散策ビュー"></div>
+
+  <header id="hud" class="hud" aria-hidden="true">
+    <div class="brand">
+      <strong>郷野の家</strong>
+      <span id="placeLabel">前庭</span>
+    </div>
+    <div class="status"><span class="dot"></span><span>WALK</span></div>
+  </header>
+
+  <div id="crosshair" aria-hidden="true"><span></span><span></span></div>
+  <div id="interaction" role="status" aria-live="polite"></div>
+
+  <div id="desktopHelp" class="desktop-help" aria-hidden="true">
+    <span><kbd>WASD</kbd> 移動</span>
+    <span><kbd>Mouse</kbd> 視点</span>
+    <span><kbd>Shift</kbd> 速歩</span>
+    <span><kbd>F</kbd> 開閉</span>
+    <span><kbd>Esc</kbd> 解除</span>
+  </div>
+
+  <div id="mobileControls" class="mobile-controls" aria-hidden="true">
+    <div id="joystick" class="joystick"><div id="joystickKnob"></div></div>
+    <div id="lookPad" class="look-pad"></div>
+    <button id="actionButton" type="button" aria-label="建具を開閉">開閉</button>
+  </div>
+
+  <section id="startScreen" class="start-screen">
+    <div class="start-card">
+      <p class="eyebrow">RURAL HOUSE WALK</p>
+      <h1>郷野の家</h1>
+      <p class="lead">古い木造住宅と、小さな畑や庭のある田園を自由に歩く。</p>
+      <button id="startButton" type="button">散策をはじめる</button>
+      <div class="start-note">
+        <span>PC：WASD＋マウス</span>
+        <span>スマートフォン：左スティック＋右側スワイプ</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="pauseScreen" class="pause-screen" hidden>
+    <div>
+      <p>PAUSED</p>
+      <button id="resumeButton" type="button">散策に戻る</button>
+    </div>
+  </section>
+
+  <noscript>このアプリの実行にはJavaScriptが必要です。</noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
